@@ -1,0 +1,242 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:voiceView="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:id="@+id/content"
+    android:background="@mipmap/home_bg"
+    android:layout_height="match_parent">
+
+    <com.ogaclejapan.arclayout.ArcLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:arc_axisRadius="130dp"
+        app:arc_freeAngle="true"
+        app:arc_origin="bottom"
+        app:arc_radius="140dp">
+
+        <LinearLayout
+
+            android:id="@+id/layout1"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:arc_angle="30">
+
+            <Button
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/btn1"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                />
+
+            <TextView
+                android:id="@+id/tv1"
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="电开的源" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout2"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:arc_angle="60">
+
+            <Button
+
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/btn2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                 />
+
+            <TextView
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:id="@+id/tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="前灯开" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/layout3"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:arc_angle="90">
+
+            <Button
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/btn3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                 />
+
+            <TextView
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:id="@+id/tv3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="前灯开" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout4"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:arc_angle="120">
+
+            <Button
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/btn4"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+
+                  />
+
+            <TextView
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:id="@+id/tv4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="前灯开" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout5"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:arc_angle="150">
+
+            <Button
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/btn5"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                  />
+
+            <TextView
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:id="@+id/tv5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="前灯开" />
+        </LinearLayout>
+    </com.ogaclejapan.arclayout.ArcLayout>
+
+    <LinearLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="13dp"
+        android:paddingLeft="28dp"
+        android:paddingRight="28dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_text"
+                android:visibility="visible"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/btn_text" />
+
+            <TextView
+                android:gravity="center_horizontal"
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="文字" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_voice"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@mipmap/btn_voice0" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_control"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/btn_control" />
+
+            <TextView
+                android:gravity="center_horizontal"
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="控制" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <SurfaceView
+        android:id="@+id/music_record"
+        android:layout_height="@dimen/y650"
+android:layout_centerInParent="true"
+        android:layout_width="@dimen/x300"
+          />
+    <per.lijuan.meituan.View.VoiceLineView
+        android:id="@+id/voicLine"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        voiceView:maxVolume="200"
+        voiceView:middleLine="@android:color/transparent"
+        voiceView:middleLineHeight="1dp"
+        voiceView:fineness="three"
+        voiceView:rectSpace="2dp"
+        voiceView:rectWidth="5dp"
+        voiceView:sensibility="five"
+        voiceView:viewMode="line"
+        voiceView:lineSpeed="90"
+        android:layout_above="@id/title"
+        android:visibility="gone"
+        voiceView:voiceLine="@color/blue" />
+</RelativeLayout>

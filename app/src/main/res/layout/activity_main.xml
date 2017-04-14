@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg"
+    android:orientation="vertical">
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="@dimen/y96">
+    <TextView
+        android:id="@+id/tv_back"
+        android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y96"
+        android:gravity="left"
+        android:text="返回"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/x36" />
+    <TextView
+        android:id="@+id/kongzhi"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y96"
+        android:gravity="center"
+        android:text="智能控制"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/x36" />
+    <TextView
+        android:id="@+id/bianji"
+        android:layout_weight="1"
+        android:paddingRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y96"
+        android:gravity="right"
+        android:text="编辑"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/x36" />
+</LinearLayout>>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:background="#33ffffff"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/x33"
+        android:text="长按按钮可编辑"
+        android:textColor="#bababa"
+        android:textSize="@dimen/x30"
+         />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#ffffff" />
+
+    <per.lijuan.meituan.View.DragGridView
+        android:id="@+id/mGridViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y620"
+        android:numColumns="5"
+        android:background="#33ffffff"
+        android:visibility="visible"
+        android:listSelector="@android:color/transparent"
+        app:drag_last_position="true"
+        app:drag_scale="1.05"
+        app:drag_start_position="0"
+        app:scale_mill="200"
+        app:vibrator="true" />
+    <per.lijuan.meituan.View.DragGridView
+        android:id="@+id/fileGridView"
+
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y620"
+        android:numColumns="5"
+        android:background="#33ffffff"
+        android:visibility="gone"
+        android:listSelector="@android:color/transparent"
+        app:drag_last_position="true"
+        app:drag_scale="1.05"
+        app:drag_start_position="0"
+        app:scale_mill="200"
+        app:vibrator="true"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/x33"
+        android:text="长按按钮可编辑"
+        android:textColor="#bababa"
+        android:textSize="@dimen/x30" />
+
+    <GridView
+        android:id="@+id/mGridViewPager1"
+        android:listSelector="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y220"
+        android:layout_gravity="center"
+        android:numColumns="5"
+        android:overScrollMode="never"
+        android:background="#33ffffff" />
+
+
+</LinearLayout>

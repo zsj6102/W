@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/x592"
+    android:layout_height="wrap_content"
+    android:background="@mipmap/dail_back"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+
+        android:id="@+id/layoutleft"
+
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/y44"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x114"
+            android:text="数宝宝"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/x32" />
+
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x48"
+            android:layout_marginRight="@dimen/x114"
+            android:text="18016638916"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/x32" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="@dimen/x436"
+        android:layout_height="@dimen/y139"
+        android:layout_marginBottom="@dimen/y22"
+        android:layout_marginLeft="@dimen/x78"
+        android:layout_marginRight="@dimen/x78"
+        android:layout_marginTop="@dimen/y20"
+        android:background="@mipmap/sms_edit">
+
+        <EditText
+            android:id="@+id/edt_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/x26"
+
+            android:paddingTop="@dimen/y18"
+            android:background="@null"
+            android:textSize="@dimen/x30"
+
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="@dimen/x436"
+        android:layout_height="@dimen/y52"
+        android:layout_marginLeft="@dimen/x78"
+        android:layout_marginRight="@dimen/x78"
+        android:layout_marginBottom="@dimen/y27"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <Button
+
+            android:id="@+id/btn_cancel"
+            android:layout_width="@dimen/x111"
+            android:layout_height="@dimen/y52"
+            android:layout_alignParentRight="true"
+
+            android:layout_marginLeft="@dimen/x54"
+            android:background="@mipmap/dail_btn"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/x32" />
+
+        <Button
+            android:id="@+id/btn_phone"
+            android:layout_width="@dimen/x111"
+
+            android:layout_height="@dimen/y52"
+
+            android:layout_toLeftOf="@id/btn_cancel"
+            android:background="@mipmap/dail_btn"
+            android:gravity="center"
+            android:text="发送"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/x32" />
+
+    </RelativeLayout>
+
+</LinearLayout>
