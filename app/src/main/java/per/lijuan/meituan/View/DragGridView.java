@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -36,7 +37,7 @@ import per.lijuan.meituan.R;
  * Created by kenneth on 15/9/9.
  * <a>http://blog.csdn.net/xiaanming/article/details/17718579</a>
  */
-public class DragGridView extends GridView {
+public class DragGridView extends GridView  implements AdapterView.OnItemLongClickListener{
     public static final String TAG = DragGridView.class.getSimpleName();
     /**
      * DragGridView的item长按响应的时间， 默认是1000毫秒，也可以自行设置
@@ -157,9 +158,8 @@ public class DragGridView extends GridView {
      * 是否正在执行缩放动画
      */
     private boolean mIsScaleAnima = false;
-
     private boolean mIsVibrator = false;
-
+    private boolean isLong;
     public DragGridView(Context context) {
         this(context, null);
     }
@@ -200,7 +200,7 @@ public class DragGridView extends GridView {
         public void run() {
             isDrag = true; // 设置可以拖拽
             if (mIsVibrator) mVibrator.vibrate(100); // 震动一下
-           mStartDragItemView.setBackgroundColor(Color.parseColor("#19FFFFFF"));// 隐藏该item
+
 
             // 根据我们按下的点显示item镜像
             createDragImage(mDragBitmap, mDownX, mDownY);
@@ -220,6 +220,9 @@ public class DragGridView extends GridView {
 //            }
 //        }
     }
+
+
+
 
     public void setDragStartPosition(int dragStartPosition) {
         mDragStartPosition = dragStartPosition;
@@ -292,6 +295,7 @@ public class DragGridView extends GridView {
         this.dragResponseMS = dragResponseMS;
     }
 
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
@@ -337,7 +341,7 @@ public class DragGridView extends GridView {
                 // 获取mDragItemView在缓存中的Bitmap对象
                 Bitmap drawingCache = mStartDragItemView.getDrawingCache();
                 // mDragBitmap = Bitmap.createBitmap(drawingCache);
-                mDragBitmap = Bitmap.createScaledBitmap(drawingCache, (int) (drawingCache.getWidth() * mDragScale), (int) (drawingCache.getHeight() * mDragScale), true);
+                mDragBitmap = Bitmap.createScaledBitmap(drawingCache, (int) (drawingCache.getWidth() *mDragScale ), (int) (drawingCache.getHeight() * mDragScale), true);
 
                 // 这一步很关键，释放绘图缓存，避免出现重复的镜像
                 mStartDragItemView.destroyDrawingCache();
@@ -354,8 +358,8 @@ public class DragGridView extends GridView {
 
                 break;
             case MotionEvent.ACTION_UP:
-                mHandler.removeCallbacks(mLongClickRunnable);
-                mHandler.removeCallbacks(mScrollRunnable);
+                    mHandler.removeCallbacks(mLongClickRunnable);
+                    mHandler.removeCallbacks(mScrollRunnable);
 
                 break;
         }
@@ -382,31 +386,41 @@ public class DragGridView extends GridView {
         if (y < topOffset || y > topOffset + dragView.getHeight()) {
             return false;
         }
-
         return true;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (isDrag && mDragImageView != null) {
-            switch (ev.getAction()) {
-                case MotionEvent.ACTION_MOVE:
-                    moveX = (int) ev.getX();
-                    moveY = (int) ev.getY();
-                    mStartDragItemView.setBackgroundColor(Color.TRANSPARENT);
-                    // 拖动item
-                    onDragItem(moveX, moveY);
-                    break;
-                case MotionEvent.ACTION_UP:
-                    mStartDragItemView.setBackgroundColor(Color.TRANSPARENT);
-                    onStopDrag((int) ev.getX(), (int) ev.getY());
-                    isDrag = false;
-                    break;
-            }
-            return true;
-        }
+         if(isDrag&&mDragImageView!=null){
+             isLong = true;
+             switch (ev.getAction()) {
+                 case MotionEvent.ACTION_MOVE:
+
+                     moveX = (int) ev.getX();
+                     moveY = (int) ev.getY();
+                     mStartDragItemView.setBackgroundColor(Color.parseColor("#19FFFFFF"));
+//                     mStartDragItemView.setBackgroundColor(Color.TRANSPARENT);
+                     // 拖动item
+                     onDragItem(moveX, moveY);
+
+
+                     break;
+                 case MotionEvent.ACTION_UP:
+
+                      mStartDragItemView.setBackgroundColor(Color.TRANSPARENT);
+                     onStopDrag((int) ev.getX(), (int) ev.getY());
+                     isDrag = false;
+
+                     break;
+             }
+             return true;
+         }
+
+
         return super.onTouchEvent(ev);
     }
+
+
 
     /**
      * 创建拖动的镜像
@@ -430,12 +444,10 @@ public class DragGridView extends GridView {
         mDragImageView = new ImageView(getContext());
         mDragImageView.setImageBitmap(bitmap);
 //        mDragImageView.setBackgroundResource(R.drawable.bg_shadow);
-
-
         mDragLayout = new FrameLayout(getContext());
         mDragLayout.addView(mDragImageView);
-
         mWindowManager.addView(mDragLayout, mWindowLayoutParams);
+
     }
 
     /**
@@ -455,8 +467,10 @@ public class DragGridView extends GridView {
     private void onDragItem(int moveX, int moveY) {
         mWindowLayoutParams.x = moveX - mPoint2ItemLeft + mOffset2Left;
         mWindowLayoutParams.y = moveY - mPoint2ItemTop + mOffset2Top - mStatusHeight;
+if(moveX>10|| moveY>10){
+    mWindowManager.updateViewLayout(mDragLayout, mWindowLayoutParams); // 更新镜像的位置
+}
 
-        mWindowManager.updateViewLayout(mDragLayout, mWindowLayoutParams); // 更新镜像的位置
 
 
 
@@ -586,6 +600,8 @@ public class DragGridView extends GridView {
         return animSetXY;
     }
 
+
+
     /**
      * item的交换动画效果
      *
@@ -690,6 +706,15 @@ public class DragGridView extends GridView {
         }
         return statusHeight;
     }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        if(isLong){
+            return true;
+        }
+        return false;
+    }
+
 
     public interface DragGridBaseAdapter {
 

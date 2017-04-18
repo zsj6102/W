@@ -11,6 +11,9 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -53,7 +56,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import omrecorder.AudioChunk;
@@ -77,7 +79,7 @@ import static per.lijuan.meituan.Util.AndroidUtil.isNetworkAvailable;
  * Created by admin on 2017/3/24.
  */
 
-public class ShowActivity extends Activity implements SpeechSynthesizerListener {
+public class ShowActivity extends BaseActivity implements SpeechSynthesizerListener {
 
     private int count = 0;
     String SENT_SMS_ACTION = "SENT_SMS_ACTION";
@@ -91,6 +93,7 @@ public class ShowActivity extends Activity implements SpeechSynthesizerListener 
     private Button btn3;
     private Button btn4;
     private Button btn5;
+
     private LinearLayout layout1;
     private LinearLayout layout2;
     private LinearLayout layout3;
@@ -101,6 +104,8 @@ public class ShowActivity extends Activity implements SpeechSynthesizerListener 
     private TextView tv3;
     private TextView tv4;
     private TextView tv5;
+    private TextView tv_text;
+    private TextView tv_control;
     private List<BottomCom> list;
     private Realm realm;
     Recorder recorder;
@@ -155,14 +160,22 @@ public class ShowActivity extends Activity implements SpeechSynthesizerListener 
         super.onCreate(savedInstanceState);
         realm = Realm.getDefaultInstance();
         initialTts();
-         setupRecorder();
+        int checkPermission = ContextCompat.checkSelfPermission(ShowActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int ch = ContextCompat.checkSelfPermission(ShowActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (checkPermission == PackageManager.PERMISSION_GRANTED && ch  == PackageManager.PERMISSION_GRANTED){
+            setupRecorder();
+        }
+
         setContentView(R.layout.show_layout);
         mContext =  this;
       smsDialog   = new SmsDialog(ShowActivity.this,R.style.mydialog);
         registerReceiver(sendMessage, new IntentFilter(SENT_SMS_ACTION));
         registerReceiver(receiver, new IntentFilter(DELIVERED_SMS_ACTION));
         sv = (SurfaceView)findViewById(R.id.music_record);
+        sv.setZOrderOnTop(true);
         holder = sv.getHolder();
+
+        holder.setFormat(PixelFormat.TRANSPARENT);
         holder.addCallback(callback);
         findView();
         resmap = new HashMap<>();
@@ -897,20 +910,15 @@ public class ShowActivity extends Activity implements SpeechSynthesizerListener 
         layout3 = (LinearLayout)findViewById(R.id.layout3);
         layout4 = (LinearLayout)findViewById(R.id.layout4);
         layout5 = (LinearLayout)findViewById(R.id.layout5);
+       tv_control = (TextView)findViewById(R.id.tv_control);
+        tv_text = (TextView)findViewById(R.id.tv_text);
         tv1 = (TextView)findViewById(R.id.tv1);
         tv2 = (TextView)findViewById(R.id.tv2);
         tv3 = (TextView)findViewById(R.id.tv3);
         tv4 = (TextView)findViewById(R.id.tv4);
         tv5 = (TextView)findViewById(R.id.tv5);
         voiceLineView = (VoiceLineView) findViewById(R.id.voicLine);
-        btn_control.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ShowActivity.this,MainActivity.class);
-                startActivity(intent);
-                ShowActivity.this.finish();
-            }
-        });
+
         btn_voice.setOnTouchListener(new View.OnTouchListener() {
             long start;
             long end;
@@ -937,7 +945,7 @@ public class ShowActivity extends Activity implements SpeechSynthesizerListener 
                         if((end-start)>500){
                             CheckNet();
                             File file = new File(Environment.getExternalStorageDirectory()+"/"+"zsj.wav");
-
+                            Log.e("file",file.getName());
                                 SendWav.send(file, new PostCallBack() {
                                     @Override
                                     public void excute(String str) {
@@ -970,85 +978,69 @@ public class ShowActivity extends Activity implements SpeechSynthesizerListener 
                 return false;
             }
         });
-        btn_text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-//                SendText.send("打开阿门", new PostCallBack() {
-//                    @Override
-//                    public void excute(String str) {
-//                        try {
-//                            JSONObject jsonObject = new JSONObject(str);
-//                            Log.e(TAG, jsonObject.get("status")+ "=======");
-//                             Log.e(TAG, jsonObject.get("info")+ "=======");
-//                            mSpeechSynthesizer.speak((String)jsonObject.get("info"));
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-                count++;
-                if(count%2==0){
-                    final DailDialog dialog = new DailDialog(ShowActivity.this,R.style.mydialog);
-                    dialog.show();
-                    dialog.setUser("郑少杰");
-                    dialog.setPhone("5554");
-                    dialog.setCancelButtonListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.setSureButtonListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                                int checkPermission = ContextCompat.checkSelfPermission(ShowActivity.this, Manifest.permission.CALL_PHONE);
-                                if (checkPermission != PackageManager.PERMISSION_GRANTED) {
-                                    ActivityCompat.requestPermissions(ShowActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 0);
-
-                                    Log.d("TTTT", "弹出提示");
-                                }else {
-                                    callPhone();
-                                }
-
-                        }
-                    });
-                }else{
-
-                    smsDialog.show();
-                    smsDialog.setUser("郑少杰");
-                    smsDialog.setPhone("5554");
-                    smsDialog.setCancelButtonListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            smsDialog.dismiss();
-                        }
-                    });
-                    smsDialog.setSureButtonListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                                int checkPermission = ContextCompat.checkSelfPermission(ShowActivity.this, Manifest.permission.SEND_SMS);
-                                if (checkPermission != PackageManager.PERMISSION_GRANTED) {
-                                    ActivityCompat.requestPermissions(ShowActivity.this, new String[]{Manifest.permission.SEND_SMS}, 1);
-
-                                    Log.d("TTTT", "弹出提示");
-                                }else{
-                                    sendSms();
-                                }
-
-
-
-
-                        }
-                    });
-                }
-
-            }
-        });
+        btn_text.setOnClickListener(listenertext);
+        tv_text.setOnClickListener(listenertext);
+        btn_control.setOnClickListener(listenercontrol);
+        tv_control.setOnClickListener(listenercontrol);
     }
+    private View.OnClickListener listenercontrol = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            btn_control.setBackgroundResource(R.mipmap.btn_control);
+            Intent intent = new Intent(ShowActivity.this,MainActivity.class);
+            startActivity(intent);
+            ShowActivity.this.finish();
+        }
+    };
+   private View.OnClickListener listenertext = new View.OnClickListener() {
+       @Override
+       public void onClick(View v) {
 
+           count++;
+           if(count%2==0){
+               final DailDialog dialog = new DailDialog(ShowActivity.this,R.style.mydialog);
+               dialog.show();
+
+               dialog.setUser("郑少杰");
+               dialog.setPhone("5554");
+               dialog.setCancelButtonListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       dialog.dismiss();
+
+                   }
+               });
+               dialog.setSureButtonListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       callPhone();
+
+                   }
+               });
+           }else{
+
+               smsDialog.show();
+
+               smsDialog.setUser("郑少杰");
+               smsDialog.setPhone("5554");
+               smsDialog.setCancelButtonListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       smsDialog.dismiss();
+
+                   }
+               });
+               smsDialog.setSureButtonListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       sendSms();
+                   }
+               });
+           }
+
+       }
+   };
     public void callPhone()
     {
         Intent intent = new Intent(Intent.ACTION_CALL);
@@ -1081,37 +1073,8 @@ public class ShowActivity extends Activity implements SpeechSynthesizerListener 
             sm.sendTextMessage(num, null, content, sentPI, deliverPI);
         }
     }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-    {
-
-        if (requestCode == 0)
-        {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                callPhone();
-            } else
-            {
-                // Permission Denied
-                Toast.makeText(ShowActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
-            }
-            return;
-        }
-        if(requestCode == 1){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                sendSms();
-            } else
-            {
-                // Permission Denied
-                Toast.makeText(ShowActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
-            }
-            return;
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
     private void setupRecorder() {
+        Log.e("efi",file().getName());
         recorder = OmRecorder.wav(
                 new PullTransport.Default(mic(), new PullTransport.OnAudioChunkPulledListener() {
                     @Override
@@ -1165,6 +1128,7 @@ public class ShowActivity extends Activity implements SpeechSynthesizerListener 
                 case Activity.RESULT_OK:
                     Toast.makeText(mContext, "短信发送成功", Toast.LENGTH_SHORT).show();
                     smsDialog.dismiss();
+
                     break;
                 default:
                     Toast.makeText(mContext, "发送失败", Toast.LENGTH_LONG).show();
@@ -1313,7 +1277,7 @@ public class ShowActivity extends Activity implements SpeechSynthesizerListener 
 
             //拿到图片     getRescources 是获取应用资源 包括res 下所有的资源
             resources= getResources();
-            drawBitmap(R.mipmap.cymbal_12);
+            drawBitmap(R.mipmap.people);
 
             Log.e("tag","============over=============");
 
@@ -1343,7 +1307,7 @@ public class ShowActivity extends Activity implements SpeechSynthesizerListener 
     private void drawBitmap(int id ) {
         //锁定并拿到画布
         Canvas canvas = holder.lockCanvas();
-
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
         Bitmap bmp = getBitmap(id);
 

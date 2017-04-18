@@ -33,7 +33,7 @@
 
             <TextView
                 android:id="@+id/tv1"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:textColor="#ffffff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
                  />
 
             <TextView
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:textColor="#ffffff"
                 android:id="@+id/tv2"
                 android:layout_width="wrap_content"
@@ -84,7 +84,7 @@
                  />
 
             <TextView
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:textColor="#ffffff"
                 android:id="@+id/tv3"
                 android:layout_width="wrap_content"
@@ -110,7 +110,7 @@
                   />
 
             <TextView
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:textColor="#ffffff"
                 android:id="@+id/tv4"
                 android:layout_width="wrap_content"
@@ -135,7 +135,7 @@
                   />
 
             <TextView
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:textColor="#ffffff"
                 android:id="@+id/tv5"
                 android:layout_width="wrap_content"
@@ -155,6 +155,7 @@
         android:paddingRight="28dp">
 
         <LinearLayout
+            android:id="@+id/layout_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -170,6 +171,7 @@
                 android:background="@drawable/btn_text" />
 
             <TextView
+                android:id="@+id/tv_text"
                 android:gravity="center_horizontal"
                 android:textSize="16sp"
                 android:textColor="#ffffff"
@@ -194,6 +196,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_control"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -208,6 +211,7 @@
                 android:background="@drawable/btn_control" />
 
             <TextView
+                android:id="@+id/tv_control"
                 android:gravity="center_horizontal"
                 android:textSize="16sp"
                 android:textColor="#ffffff"
@@ -219,14 +223,15 @@
 
     <SurfaceView
         android:id="@+id/music_record"
-        android:layout_height="@dimen/y650"
-android:layout_centerInParent="true"
-        android:layout_width="@dimen/x300"
+        android:layout_height="@dimen/y670"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="@dimen/x560"
           />
     <per.lijuan.meituan.View.VoiceLineView
         android:id="@+id/voicLine"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="60dp"
         voiceView:maxVolume="200"
         voiceView:middleLine="@android:color/transparent"
         voiceView:middleLineHeight="1dp"

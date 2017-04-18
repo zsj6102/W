@@ -1,6 +1,5 @@
 package per.lijuan.meituan.Activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioFormat;
 import android.media.MediaRecorder;
@@ -14,9 +13,12 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.blankj.utilcode.utils.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,8 +55,8 @@ import per.lijuan.meituan.View.MyDialog;
 
 import static per.lijuan.meituan.Util.AndroidUtil.isNetworkAvailable;
 
-
-public class MainActivity extends Activity implements View.OnClickListener, RealmChangeListener<Realm> {
+//迷之嵌套，先这样
+public class MainActivity extends BaseActivity implements View.OnClickListener, RealmChangeListener<Realm> {
     List<Map<String, Object>> mList;
     List<Map<String, Object>> list;
     List<Command> mmlist;
@@ -80,6 +82,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Real
     private FileDialog fileDialog;
     Recorder recorder;
     private boolean isInFile = false;
+    private Button btnall;
     private int[] res = {R.mipmap.bottom0, R.mipmap.bottom1, R.mipmap.bottom2, R.mipmap.bottom3, R.mipmap.bottom4, R.mipmap.bottom5, R.mipmap.bottom6,
             R.mipmap.bottom7, R.mipmap.bottom8};
     private int[] check = {R.mipmap.check0, R.mipmap.check1, R.mipmap.check2, R.mipmap.check3, R.mipmap.check4, R.mipmap.check5, R.mipmap.check6, R.mipmap.check7, R.mipmap.check8};
@@ -326,6 +329,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Real
         list = new ArrayList<>();
         coli = new ArrayList<>();
         resmap = new HashMap<>();
+
         Log.e("count",count+"");
         realm = Realm.getDefaultInstance();
         setupRecorder();
@@ -401,6 +405,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Real
         edit_tv.setOnClickListener(this);
         edit_com = (TextView) findViewById(R.id.kongzhi);
         tv_back = (TextView) findViewById(R.id.tv_back);
+
         tv_back.setOnClickListener(this);
     }
 
@@ -593,8 +598,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Real
                                                                   isInFile = true;
                                                                   Toast.makeText(MainActivity.this, "isFolder", Toast.LENGTH_SHORT).show();
                                                                   fileGridView = (DragGridView) findViewById(R.id.fileGridView);
+                                                                  btnall = (Button)findViewById(R.id.btn_all);
                                                                   dragGridView.setVisibility(View.GONE);
                                                                   fileGridView.setVisibility(View.VISIBLE);
+                                                                  btnall.setVisibility(View.VISIBLE);
                                                                   edit_com.setText("群组");
                                                                   Log.e("mList", mList.size() + "");
                                                                   List<Command> comlist = new ArrayList<Command>();
@@ -621,6 +628,34 @@ public class MainActivity extends Activity implements View.OnClickListener, Real
 
                                                                       }
                                                                   }
+
+                                                                  btnall.setOnClickListener(new View.OnClickListener() {
+                                                                      @Override
+                                                                      public void onClick(View v) {
+                                                                          for(int i = 0;i<coli.size();i++){
+                                                                              Log.e("string",(String) coli.get(i).get("ItemCommand"));
+                                                                              SendText.send((String) coli.get(i).get("ItemCommand"), new PostCallBack() {
+                                                                                  @Override
+                                                                                  public void excute(String str) {
+//                                                                                      try {
+////                                                                                          JSONObject jsonObject = new JSONObject(str);
+////                                                                                          Message msg = new Message();
+////                                                                                          msg.what = 3;
+////                                                                                          Map<String, String> map = new HashMap<String, String>();
+////                                                                                          map.put("status", jsonObject.get("status").toString());
+////                                                                                          if (jsonObject.get("status").toString().equals("true")) {
+////                                                                                              map.put("info", jsonObject.get("info").toString());
+////                                                                                          }
+////                                                                                          msg.obj = map;
+////                                                                                          MainActivity.this.handler.sendMessage(msg);
+//                                                                                      } catch (JSONException e) {
+//                                                                                          e.printStackTrace();
+//                                                                                      }
+                                                                                  }
+                                                                              });
+                                                                          }
+                                                                      }
+                                                                  });
                                                                   Log.e("fileSize", coli.size() + "");
                                                                   fileAdapter = new DragGridAdapter(MainActivity.this, coli);
                                                                   fileAdapter.setClicker(new SubClickListener() {
@@ -854,6 +889,16 @@ public class MainActivity extends Activity implements View.OnClickListener, Real
                                                                       }
                                                                   });
                                                                   fileGridView.setAdapter(fileAdapter);
+                                                                  fileGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                                      @Override
+                                                                      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                                          if(coli.size()!=0 && position != coli.size()){
+                                                                              fileAdapter.getItemListener().click(position);
+                                                                          }else{
+                                                                              fileAdapter.getAddClickListener().addItem();
+                                                                          }
+                                                                      }
+                                                                  });
                                                               }else{
                                                                fileDialog = new FileDialog(MainActivity.this, R.style.mydialog);
                                                                   fileDialog.show();
@@ -1121,7 +1166,18 @@ public class MainActivity extends Activity implements View.OnClickListener, Real
         dragGridView = (DragGridView)
 
                 findViewById(R.id.mGridViewPager);
+        dragGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                ToastUtils.showShortToast(getString(R.string.error_grant));
 
+                if(mList.size()!=0 && position != mList.size()){
+                dragGridAdapter.getItemListener().click(position);
+                }else{
+                    dragGridAdapter.getAddClickListener().addItem();
+                }
+            }
+        });
         dragGridView.setAdapter(dragGridAdapter);
         grid.setAdapter(mAdapter);
         realm.addChangeListener(this);
@@ -1258,6 +1314,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Real
                     fileGridView.setVisibility(View.GONE);
                     isInFile = false;
                     edit_com.setText("智能控制");
+                    btnall.setVisibility(View.GONE);
                 } else {
                     Intent intent = new Intent(MainActivity.this, ShowActivity.class);
                     startActivity(intent);

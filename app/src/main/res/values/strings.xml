@@ -5,4 +5,5 @@
     <string name="error_no_sdcard">没有SD卡，无法存储录音数据</string>
     <string name="error_state_record">正在录音中，请先停止录音</string>
     <string name="error_unknown">无法识别的错误</string>
+    <string name="error_grant">部分所需权限请求被拒绝，程序可能会出现崩溃！</string>
 </resources>
