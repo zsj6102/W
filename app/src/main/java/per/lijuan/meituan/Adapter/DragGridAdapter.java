@@ -1,19 +1,15 @@
 package per.lijuan.meituan.Adapter;
-
 import android.content.Context;
-
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.List;
 import java.util.Map;
 
+import per.lijuan.meituan.Bean.Command;
 import per.lijuan.meituan.Interface.AddClickListener;
 import per.lijuan.meituan.Interface.CoItemListener;
 import per.lijuan.meituan.Interface.MoveSwapListener;
@@ -50,7 +46,15 @@ public class DragGridAdapter extends BaseAdapter implements DragGridView.DragGri
     }
 
     public void setCoItemListener(CoItemListener listener){this.itemListener = listener;}
+    public CoItemListener getItemListener(){
+        return  itemListener;
+    }
     public void setAddClickListener(AddClickListener addListener){this.addClickListener = addListener;}
+
+    public AddClickListener getAddClickListener() {
+        return addClickListener;
+    }
+
     public void setClicker(SubClickListener clicker){
         this.clicker = clicker;
     }
@@ -95,43 +99,11 @@ public class DragGridAdapter extends BaseAdapter implements DragGridView.DragGri
                     }
                 });
                 if(mData.size()!=0 && position != mData.size()){
-                    holder.mImageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if(itemListener!=null){
-                                itemListener.click(position);
-                            }
-                        }
-                    });
+
                     holder.mTextView.setText(mData.get(position).get("ItemText").toString());
                     holder.mImageView.setBackgroundResource((int)mData.get(position).get("ItemImage"));
                 }else{
-                    holder.mImageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-//                            holder.mImageView.setOnTouchListener(new View.OnTouchListener() {
-//                                @Override
-//                                public boolean onTouch(View v, MotionEvent event) {
-//                                    switch (event.getAction()){
-//                                        case MotionEvent.ACTION_DOWN:
-//                                            holder.mImageView.
-//                                            break;
-//                                        case MotionEvent.ACTION_UP:
-//                                            holder.mImageView.setBackgroundResource(R.mipmap.add_item);
-//                                            break;
-//                                        default:
-//                                            break;
-//                                    }
-//                                    return false;
-//                                }
-//                            });
-                            if(addClickListener!=null){
-                                addClickListener.addItem();
-                            }
-                        }
-                    });
                     holder.mTextView.setText("");
-
                     holder.mImageView.setBackgroundResource(R.mipmap.add_item);
                 }
 
