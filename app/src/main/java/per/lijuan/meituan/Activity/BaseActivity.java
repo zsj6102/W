@@ -13,7 +13,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import per.lijuan.meituan.R;
 
 /**
- * Created by admin on 2017/4/17.
+ * Created by zsj on 2017/4/17.
  */
 
 public class BaseActivity extends Activity {
