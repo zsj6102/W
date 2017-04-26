@@ -100,6 +100,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/btn_name"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:background="@drawable/edit_corner"
                 android:textSize="16sp" />
 
@@ -130,6 +131,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/edit_corner"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="16sp" />
 
             <Button
@@ -183,6 +185,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/btn_name"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:background="@drawable/edit_corner"
                 android:textSize="16sp" />
         </LinearLayout>

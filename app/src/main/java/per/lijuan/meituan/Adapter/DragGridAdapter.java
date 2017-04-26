@@ -1,5 +1,6 @@
 package per.lijuan.meituan.Adapter;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import per.lijuan.meituan.Bean.Command;
 import per.lijuan.meituan.Interface.AddClickListener;
 import per.lijuan.meituan.Interface.CoItemListener;
 import per.lijuan.meituan.Interface.MoveSwapListener;
+import per.lijuan.meituan.Interface.SetDrag;
 import per.lijuan.meituan.View.DragGridView;
 import per.lijuan.meituan.Interface.MoveBottomListener;
 import per.lijuan.meituan.Interface.SubClickListener;
@@ -31,6 +33,7 @@ public class DragGridAdapter extends BaseAdapter implements DragGridView.DragGri
     private MoveSwapListener swapListener;
     private AddClickListener addClickListener;
     private CoItemListener itemListener;
+    private SetDrag draglitener;
     public DragGridAdapter(Context context, List<Map<String,Object>> list ){
         inflater = LayoutInflater.from(context);
         mData = list;
@@ -44,7 +47,9 @@ public class DragGridAdapter extends BaseAdapter implements DragGridView.DragGri
         this.isShowDelete=isShowDelete;
         notifyDataSetChanged();
     }
-
+    public void setDraglitener(SetDrag draglitener){
+        this.draglitener = draglitener;
+    }
     public void setCoItemListener(CoItemListener listener){this.itemListener = listener;}
     public CoItemListener getItemListener(){
         return  itemListener;
@@ -143,9 +148,18 @@ public class DragGridAdapter extends BaseAdapter implements DragGridView.DragGri
     public void setHideItem(int hidePosition) {
 
     }
-//拖动到下面添加
+
+    @Override
+    public void dragable(int pos) {
+        if(draglitener!=null){
+            draglitener.canDrag(pos);
+        }
+    }
+
+    //拖动到下面添加
     @Override
     public void deleteItem(int deletePosition) {
+        Log.e("deletePosition",deletePosition+"");
         if(listener!=null){ listener.moveBottom(deletePosition);}
     }
 }

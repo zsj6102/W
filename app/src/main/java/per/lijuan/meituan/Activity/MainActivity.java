@@ -46,6 +46,7 @@ import per.lijuan.meituan.Interface.AddClickListener;
 import per.lijuan.meituan.Interface.CoItemListener;
 import per.lijuan.meituan.Interface.MoveSwapListener;
 import per.lijuan.meituan.Interface.PostCallBack;
+import per.lijuan.meituan.Interface.SetDrag;
 import per.lijuan.meituan.View.DragGridView;
 import per.lijuan.meituan.Interface.MoveBottomListener;
 import per.lijuan.meituan.Interface.SubClickListener;
@@ -419,7 +420,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         dragGridAdapter = new DragGridAdapter(this, getList());
 
+        dragGridAdapter.setDraglitener(new SetDrag() {
+            @Override
+            public void canDrag(int pos) {
 
+                if(pos == mList.size()||(boolean) mList.get(pos).get("isFolder")){
+                    dragGridView.setDragable(false);
+                }else{
+                    dragGridView.setDragable(true);
+                }
+            }
+        });
         dragGridAdapter.setBottomListener(new MoveBottomListener() {
             @Override
             public void moveBottom(int pos) {
@@ -473,12 +484,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         dragGridAdapter.setMoveSwapListener(new MoveSwapListener() {
                                                 @Override
                                                 public void swap(final int oldpos, final int newpos) {
-
+                                                    if(newpos==mList.size()){
+                                                        return;
+                                                    }
                                                     if (!(boolean) mList.get(newpos).get("isFolder")) {
 
                                                         Toast.makeText(MainActivity.this, "必须要文件夹", Toast.LENGTH_SHORT).show();
                                                         return;
-                                                    } else {
+                                                    } else if((boolean) mList.get(oldpos).get("isFolder")){
+                                                        Toast.makeText(MainActivity.this, "文件夹不能拖到文件夹", Toast.LENGTH_SHORT).show();
+                                                        return;
+                                                    }else {
+
                                                         if (oldpos != mList.size()) {
 
                                                             realm.executeTransaction(new Realm.Transaction() {
@@ -658,6 +675,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                                                   });
                                                                   Log.e("fileSize", coli.size() + "");
                                                                   fileAdapter = new DragGridAdapter(MainActivity.this, coli);
+                                                                  fileAdapter.setDraglitener(new SetDrag() {
+                                                                      @Override
+                                                                      public void canDrag(int pos) {
+                                                                          if(pos==coli.size()){
+                                                                              fileGridView.setDragable(false);
+                                                                          }else{
+                                                                              fileGridView.setDragable(true);
+                                                                          }
+                                                                      }
+                                                                  });
                                                                   fileAdapter.setClicker(new SubClickListener() {
                                                                       @Override
                                                                       public void click(View view, final int pos) {
@@ -1174,6 +1201,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 if(mList.size()!=0 && position != mList.size()){
                 dragGridAdapter.getItemListener().click(position);
                 }else{
+
                     dragGridAdapter.getAddClickListener().addItem();
                 }
             }

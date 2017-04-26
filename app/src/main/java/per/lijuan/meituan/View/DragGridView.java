@@ -157,6 +157,7 @@ public class DragGridView extends GridView  implements AdapterView.OnItemLongCli
     /**
      * 是否正在执行缩放动画
      */
+    private boolean isDragable;
     private boolean mIsScaleAnima = false;
     private boolean mIsVibrator = false;
     private boolean isLong;
@@ -190,7 +191,9 @@ public class DragGridView extends GridView  implements AdapterView.OnItemLongCli
         }
 
     }
-
+    public void setDragable(boolean dragable){
+        this.isDragable = dragable;
+    }
     private Handler mHandler = new Handler();
 
     // 用来处理是否为长按的Runnable
@@ -199,11 +202,14 @@ public class DragGridView extends GridView  implements AdapterView.OnItemLongCli
         @Override
         public void run() {
             isDrag = true; // 设置可以拖拽
-            if (mIsVibrator) mVibrator.vibrate(100); // 震动一下
+            if(isDragable){
+                if (mIsVibrator) mVibrator.vibrate(100); // 震动一下
 
 
-            // 根据我们按下的点显示item镜像
-            createDragImage(mDragBitmap, mDownX, mDownY);
+                // 根据我们按下的点显示item镜像
+                createDragImage(mDragBitmap, mDownX, mDownY);
+            }
+
         }
     };
 
@@ -309,11 +315,14 @@ public class DragGridView extends GridView  implements AdapterView.OnItemLongCli
                 if (mDragPosition < mDragStartPosition) {
                     return super.dispatchTouchEvent(ev);
                 }
+                mDragAdapter.dragable(mDragPosition);
                 //如果是最后一位不交换
                 if (null != getAdapter() && mDragPosition == (getAdapter().getCount() - 1) && !mDragLastPosition) {
                     return super.dispatchTouchEvent(ev);
                 }
-
+                if(!isDragable){
+                    return super.dispatchTouchEvent(ev);
+                }
                 if (mDragPosition == AdapterView.INVALID_POSITION) {
                     return super.dispatchTouchEvent(ev);
                 }
@@ -391,7 +400,7 @@ public class DragGridView extends GridView  implements AdapterView.OnItemLongCli
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-         if(isDrag&&mDragImageView!=null){
+         if(isDrag&&mDragImageView!=null&&isDragable){
              isLong = true;
              switch (ev.getAction()) {
                  case MotionEvent.ACTION_MOVE:
@@ -738,5 +747,6 @@ if(moveX>10|| moveY>10){
          * @param deletePosition
          */
         void deleteItem(int deletePosition);
+        void dragable(int pos);
     }
 }

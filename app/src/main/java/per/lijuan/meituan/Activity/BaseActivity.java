@@ -14,6 +14,10 @@ import per.lijuan.meituan.R;
 
 /**
  * Created by zsj on 2017/4/17.
+ * 迷之缩进毁一生
+ * 链式逻辑替代深度回调逻辑，容易编写，不易出 BUG
+ * 考虑用MVP+rxjava+retrofit+lambada+dagger
+ * 文件夹拖到文件夹
  */
 
 public class BaseActivity extends Activity {

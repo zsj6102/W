@@ -160,11 +160,11 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
         super.onCreate(savedInstanceState);
         realm = Realm.getDefaultInstance();
         initialTts();
-        int checkPermission = ContextCompat.checkSelfPermission(ShowActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int ch = ContextCompat.checkSelfPermission(ShowActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
-        if (checkPermission == PackageManager.PERMISSION_GRANTED && ch  == PackageManager.PERMISSION_GRANTED){
+//        int checkPermission = ContextCompat.checkSelfPermission(ShowActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//        int ch = ContextCompat.checkSelfPermission(ShowActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+//        if (checkPermission == PackageManager.PERMISSION_GRANTED && ch  == PackageManager.PERMISSION_GRANTED){
             setupRecorder();
-        }
+//        }
 
         setContentView(R.layout.show_layout);
         mContext =  this;
@@ -930,14 +930,20 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                         start=System.currentTimeMillis();
 //                        Log.i("midon",System.currentTimeMillis()+"");
 //                        startVoice();
-                        recorder.startRecording();
+                        if(recorder!=null){
+                            recorder.startRecording();
+                        }
+
                         voiceLineView.setVisibility(View.VISIBLE);
                         break;
                     case MotionEvent.ACTION_UP:
                         end = System.currentTimeMillis();
                         Log.i("miup",System.currentTimeMillis()+"");
                         btn_voice.setBackgroundResource(R.mipmap.btn_voice0);
-                        recorder.stopRecording();
+                        if(recorder!=null){
+                            recorder.stopRecording();
+                        }
+
                         voiceLineView.setVisibility(View.GONE);
 
                         Log.i("dif",(end-start)+"");
