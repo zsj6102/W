@@ -165,7 +165,7 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
 //        if (checkPermission == PackageManager.PERMISSION_GRANTED && ch  == PackageManager.PERMISSION_GRANTED){
             setupRecorder();
 //        }
-
+//
         setContentView(R.layout.show_layout);
         mContext =  this;
       smsDialog   = new SmsDialog(ShowActivity.this,R.style.mydialog);
