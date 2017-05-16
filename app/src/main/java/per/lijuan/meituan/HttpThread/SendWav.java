@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import per.lijuan.meituan.Interface.ErrorCallBack;
 import per.lijuan.meituan.Interface.PostCallBack;
 
 
@@ -21,7 +22,7 @@ import static android.content.ContentValues.TAG;
  */
 
 public class SendWav {
-      public static void send(final File file, final PostCallBack callBack){
+      public static void send(final File file, final PostCallBack callBack, final ErrorCallBack error){
           new Thread(new Runnable() {
               @Override
               public void run() {
@@ -87,12 +88,11 @@ public class SendWav {
                           }
                       }
 
-                  }catch (MalformedURLException e) {
+                  }catch (Exception e) {
                       // TODO Auto-generated catch block
                       e.printStackTrace();
-                  } catch (IOException e) {
-                      // TODO Auto-generated catch block
-                      e.printStackTrace();
+                      Log.e("fail","post failed");
+                      error.excute();
                   }
 
               }

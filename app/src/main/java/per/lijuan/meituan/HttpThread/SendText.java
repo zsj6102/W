@@ -9,6 +9,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+
+import per.lijuan.meituan.Interface.ErrorCallBack;
 import per.lijuan.meituan.Interface.PostCallBack;
 import static android.content.ContentValues.TAG;
 
@@ -17,7 +19,7 @@ import static android.content.ContentValues.TAG;
  */
 
 public class SendText {
-    public static void send(final String str, final PostCallBack callback){
+    public static void send(final String str, final PostCallBack callback, final ErrorCallBack error){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -62,6 +64,7 @@ public class SendText {
                     }
                 }catch(Exception ex){
                     Log.e("fail","post failed");
+                    error.excute( );
                 }
             }
         }).start();

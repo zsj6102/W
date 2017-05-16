@@ -1,13 +1,12 @@
 package per.lijuan.meituan.Activity;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -26,9 +25,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.accessibility.AccessibilityManagerCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -67,6 +64,7 @@ import omrecorder.Recorder;
 import per.lijuan.meituan.Bean.BottomCom;
 import per.lijuan.meituan.HttpThread.SendText;
 import per.lijuan.meituan.HttpThread.SendWav;
+import per.lijuan.meituan.Interface.ErrorCallBack;
 import per.lijuan.meituan.Interface.PostCallBack;
 import per.lijuan.meituan.R;
 import per.lijuan.meituan.View.DailDialog;
@@ -79,7 +77,7 @@ import static per.lijuan.meituan.Util.AndroidUtil.isNetworkAvailable;
  * Created by admin on 2017/3/24.
  */
 
-public class ShowActivity extends BaseActivity implements SpeechSynthesizerListener {
+public class ShowActivity extends CheckPermissionsActivity implements SpeechSynthesizerListener,View.OnClickListener {
 
     private int count = 0;
     String SENT_SMS_ACTION = "SENT_SMS_ACTION";
@@ -152,6 +150,9 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                         Toast.makeText(ShowActivity.this,"控制失败",Toast.LENGTH_SHORT).show();
                     }
                     break;
+                case 10:
+                    Toast.makeText(ShowActivity.this, "服务器异常", Toast.LENGTH_SHORT).show();
+                    break;
             }
         }
     };
@@ -160,12 +161,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
         super.onCreate(savedInstanceState);
         realm = Realm.getDefaultInstance();
         initialTts();
-//        int checkPermission = ContextCompat.checkSelfPermission(ShowActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-//        int ch = ContextCompat.checkSelfPermission(ShowActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
-//        if (checkPermission == PackageManager.PERMISSION_GRANTED && ch  == PackageManager.PERMISSION_GRANTED){
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//6.0以上手机
+//            requestPermission();
+//        }else{
             setupRecorder();
 //        }
-//
+
+
         setContentView(R.layout.show_layout);
         mContext =  this;
       smsDialog   = new SmsDialog(ShowActivity.this,R.style.mydialog);
@@ -220,6 +222,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                     e.printStackTrace();
                                 }
                             }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
+                            }
                         });
                         for(int i= 0;i<res.length;i++){
                             if(list.get(0).getRes() == res[i]){
@@ -261,6 +270,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                     e.printStackTrace();
                                 }
                             }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
+                            }
                         });
                         for(int i= 0;i<res.length;i++){
                             if(list.get(0).getRes() == res[i]){
@@ -298,6 +314,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                            }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
                             }
                         });
                         for(int i= 0;i<res.length;i++){
@@ -347,6 +370,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                     e.printStackTrace();
                                 }
                             }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
+                            }
                         });
                         for(int i= 0;i<res.length;i++){
                             if(list.get(0).getRes() == res[i]){
@@ -391,6 +421,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                     e.printStackTrace();
                                 }
                             }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
+                            }
                         });
                         for(int i= 0;i<res.length;i++){
                             if(list.get(1).getRes() == res[i]){
@@ -431,6 +468,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                            }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
                             }
                         });
                         for(int i= 0;i<res.length;i++){
@@ -484,6 +528,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                     e.printStackTrace();
                                 }
                             }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
+                            }
                         });
                         for(int i= 0;i<res.length;i++){
                             if(list.get(0).getRes() == res[i]){
@@ -527,6 +578,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                            }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
                             }
                         });
                         for(int i= 0;i<res.length;i++){
@@ -573,6 +631,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                     e.printStackTrace();
                                 }
                             }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
+                            }
                         });
                         for(int i= 0;i<res.length;i++){
                             if(list.get(2).getRes() == res[i]){
@@ -617,6 +682,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                            }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
                             }
                         });
                         for(int i= 0;i<res.length;i++){
@@ -671,6 +743,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                     e.printStackTrace();
                                 }
                             }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
+                            }
                         });
                         for(int i= 0;i<res.length;i++){
                             if(list.get(0).getRes() == res[i]){
@@ -721,6 +800,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                     e.printStackTrace();
                                 }
                             }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
+                            }
                         });
 
                         for(int i= 0;i<res.length;i++){
@@ -769,6 +855,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                            }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
                             }
                         });
                         for(int i= 0;i<res.length;i++){
@@ -820,6 +913,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                     e.printStackTrace();
                                 }
                             }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
+                            }
                         });
                         for(int i= 0;i<res.length;i++){
                             if(list.get(3).getRes() == res[i]){
@@ -869,6 +969,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                            }
+                        }, new ErrorCallBack() {
+                            @Override
+                            public void excute() {
+                                Message msg = new Message();
+                                msg.what = 10;
+                                ShowActivity.this.handler.sendMessage(msg);
                             }
                         });
                         for(int i= 0;i<res.length;i++){
@@ -971,6 +1078,13 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                                             e.printStackTrace();
                                         }
                                     }
+                                }, new ErrorCallBack() {
+                                    @Override
+                                    public void excute() {
+                                        Message msg = new Message();
+                                        msg.what = 10;
+                                        ShowActivity.this.handler.sendMessage(msg);
+                                    }
                                 });
 
 
@@ -986,9 +1100,9 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
         });
 
         btn_text.setOnClickListener(listenertext);
-        tv_text.setOnClickListener(listenertext);
+        tv_text.setOnClickListener(this);
         btn_control.setOnClickListener(listenercontrol);
-        tv_control.setOnClickListener(listenercontrol);
+        tv_control.setOnClickListener(this);
     }
     private View.OnClickListener listenercontrol = new View.OnClickListener() {
         @Override
@@ -1040,7 +1154,16 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
                smsDialog.setSureButtonListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View v) {
-                       sendSms();
+                       String num= smsDialog.getPhone();
+                       String content= smsDialog.getEditContent();
+                       Log.e("num",num);
+                       Log.e("content",content);
+                       if( !content.trim().equals("")){
+                           sendSms(num,content);
+                       }else{
+                           Toast.makeText(ShowActivity.this,"短信内容不能为空",Toast.LENGTH_SHORT).show();
+                       }
+
                    }
                });
            }
@@ -1054,40 +1177,53 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
         intent.setData(data);
         startActivity(intent);
     }
-    private  void sendSms(){
-        String num= smsDialog.getPhone();
-        String content= smsDialog.getEditContent();
-        Intent sentIntent = new Intent(SENT_SMS_ACTION);
-        PendingIntent sentPI = PendingIntent.getBroadcast(ShowActivity.this, 0, sentIntent,
-                0);
+    private  void sendSms(String num,String content){
 
-        // create the deilverIntent parameter
-        Intent deliverIntent = new Intent(DELIVERED_SMS_ACTION);
-        PendingIntent deliverPI = PendingIntent.getBroadcast(ShowActivity.this, 0,
-                deliverIntent, 0);
-        SmsManager sm=SmsManager.getDefault();
-        //2、切割短信,把长短信切割成多条小短信
-        ArrayList<String> smss=sm.divideMessage(content);
-        //3、把多条短信发送出去
-        if(content.length()>70){
-            List<String> contents = sm.divideMessage(content);
-            for(String c:contents){
 
-                sm.sendTextMessage(num, null, c, sentPI, deliverPI);
+            Intent sentIntent = new Intent(SENT_SMS_ACTION);
+            PendingIntent sentPI = PendingIntent.getBroadcast(ShowActivity.this, 0, sentIntent,
+                    0);
+
+            // create the deilverIntent parameter
+            Intent deliverIntent = new Intent(DELIVERED_SMS_ACTION);
+            PendingIntent deliverPI = PendingIntent.getBroadcast(ShowActivity.this, 0,
+                    deliverIntent, 0);
+            SmsManager sm=SmsManager.getDefault();
+            //2、切割短信,把长短信切割成多条小短信
+            ArrayList<String> smss=sm.divideMessage(content);
+            //3、把多条短信发送出去
+            if(content.length()>70){
+                List<String> contents = sm.divideMessage(content);
+                for(String c:contents){
+
+                    sm.sendTextMessage(num, null, c, sentPI, deliverPI);
+                }
+            }else{
+                sm.sendTextMessage(num, null, content, sentPI, deliverPI);
             }
-        }else{
-            sm.sendTextMessage(num, null, content, sentPI, deliverPI);
-        }
+
     }
+//    private void requestPermission(){
+//       if (ContextCompat.checkSelfPermission(ShowActivity.this, Manifest.permission.RECORD_AUDIO)!= PackageManager.PERMISSION_GRANTED){
+//
+//       }else{
+//           setupRecorder();
+//       }
+//
+//
+//    }
     private void setupRecorder() {
         Log.e("efi",file().getName());
-        recorder = OmRecorder.wav(
-                new PullTransport.Default(mic(), new PullTransport.OnAudioChunkPulledListener() {
-                    @Override
-                    public void onAudioChunkPulled(AudioChunk audioChunk) {
-                        animateVoice((float) (audioChunk.maxAmplitude())/2);
-                    }
-                }), file());
+        if(file()!=null){
+            recorder = OmRecorder.wav(
+                    new PullTransport.Default(mic(), new PullTransport.OnAudioChunkPulledListener() {
+                        @Override
+                        public void onAudioChunkPulled(AudioChunk audioChunk) {
+                            animateVoice((float) (audioChunk.maxAmplitude())/2);
+                        }
+                    }), file());
+        }
+
     }
 
     private void animateVoice(final float maxPeak) {
@@ -1350,4 +1486,68 @@ public class ShowActivity extends BaseActivity implements SpeechSynthesizerListe
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.tv_control:
+                btn_control.setPressed(true);
+                Intent intent = new Intent(ShowActivity.this,MainActivity.class);
+                startActivity(intent);
+                ShowActivity.this.finish();
+                break;
+            case R.id.tv_text:
+                btn_text.setPressed(true);
+                count++;
+                if(count%2==0){
+                    final DailDialog dialog = new DailDialog(ShowActivity.this,R.style.mydialog);
+                    dialog.show();
+
+                    dialog.setUser("郑少杰");
+                    dialog.setPhone("5554");
+                    dialog.setCancelButtonListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+
+                        }
+                    });
+                    dialog.setSureButtonListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            callPhone();
+
+                        }
+                    });
+                }else{
+
+                    smsDialog.show();
+
+                    smsDialog.setUser("郑少杰");
+                    smsDialog.setPhone("5554");
+                    smsDialog.setCancelButtonListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            smsDialog.dismiss();
+
+                        }
+                    });
+                    smsDialog.setSureButtonListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String num= smsDialog.getPhone();
+                            String content= smsDialog.getEditContent();
+                            Log.e("num",num);
+                            Log.e("content",content);
+                            if(!content.trim().equals("")){
+                                sendSms(num,content);
+                            }else{
+                                Toast.makeText(ShowActivity.this,"短信内容不能为空",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+              break;
+
+        }
+    }
 }

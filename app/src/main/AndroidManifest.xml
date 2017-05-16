@@ -27,7 +27,6 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-<!--11111111111111111111111111111-->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
